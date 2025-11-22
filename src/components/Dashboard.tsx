@@ -1457,54 +1457,78 @@ export function Dashboard() {
       {/* Sidebar */}
       {isSidebarOpen && (
         <div className="fixed inset-0 z-50 flex">
-          <div 
-            className="fixed inset-0 bg-slate-900/70 backdrop-blur-sm transition-opacity"
+          <div
+            className="fixed inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-300"
             onClick={() => setIsSidebarOpen(false)}
-          /> 
-          <div className="relative w-80 bg-white h-full shadow-2xl flex flex-col animate-in slide-in-from-left duration-200">
-            <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-              <span className="font-bold text-slate-900 text-lg">Menu Principal</span>
-              <button onClick={() => setIsSidebarOpen(false)} className="p-2 hover:bg-slate-200 rounded-full transition-colors">
-                <X className="w-5 h-5 text-slate-600" />
+          />
+          <div className="relative w-80 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 h-full shadow-2xl flex flex-col animate-in slide-in-from-left duration-300">
+            {/* Header */}
+            <div className="p-6 flex justify-between items-center bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg">
+              <div>
+                <span className="font-bold text-white text-lg tracking-tight">Menu</span>
+                <p className="text-blue-100 text-xs font-medium">SIGCOP</p>
+              </div>
+              <button
+                onClick={() => setIsSidebarOpen(false)}
+                className="p-2 hover:bg-white/20 rounded-full transition-all duration-200 group"
+              >
+                <X className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-slate-300">
-              <div className="space-y-1 px-3">
-                <button
-                   onClick={() => { setCurrentPage('dashboard'); setIsSidebarOpen(false); }}
-                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${currentPage === 'dashboard' ? 'bg-blue-50 text-blue-800 border border-blue-100 shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
-                >
-                  <Activity className="w-4 h-4" />
-                  Painel de Controle
-                </button>
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto py-6 scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800">
+              <div className="space-y-2 px-4">
+                {/* Modules Section */}
+                <div className="pb-3">
+                  <div className="px-3 text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                    <div className="h-px flex-1 bg-gradient-to-r from-slate-600 to-transparent"></div>
+                    Módulos
+                  </div>
+                </div>
 
-                <div className="pt-4 pb-2 px-1 text-xs font-bold text-slate-400 uppercase tracking-wider">Módulos</div>
-
+                {/* Module Items */}
                 {quickServices.map((service, index) => {
                    return (
                      <button
                        key={service.id}
                        onClick={() => { setCurrentPage(pageMap[index]); setIsSidebarOpen(false); }}
-                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors group ${currentPage === pageMap[index] ? 'bg-blue-50 text-blue-800 border border-blue-100 shadow-sm' : 'text-slate-600 hover:bg-slate-100'}`}
+                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group relative overflow-hidden ${
+                         currentPage === pageMap[index]
+                           ? 'bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-white shadow-lg shadow-blue-500/10 border border-blue-400/30'
+                           : 'text-slate-300 hover:bg-slate-700/40 hover:text-white'
+                       }`}
                      >
-                       <div className="p-2 rounded-lg group-hover:bg-blue-50 transition-colors">
-                         <service.icon className={`w-4 h-4 transition-colors ${currentPage === pageMap[index] ? 'text-blue-700' : 'text-slate-400 group-hover:text-blue-700'}`} />
+                       <div className={`p-2 rounded-lg transition-all duration-200 ${
+                         currentPage === pageMap[index]
+                           ? 'bg-blue-500/30'
+                           : 'bg-slate-700/50 group-hover:bg-blue-500/20'
+                       }`}>
+                         <service.icon className={`w-4 h-4 transition-all duration-200 ${
+                           currentPage === pageMap[index] ? 'text-blue-300' : 'text-slate-400 group-hover:text-blue-400'
+                         }`} />
                        </div>
                        <div className="flex-1 text-left">
-                         <div className="font-medium">{service.title}</div>
-                         <div className="text-xs text-slate-500">{service.desc}</div>
+                         <div className="font-semibold text-sm">{service.title}</div>
+                         <div className="text-xs text-slate-400 mt-0.5">{service.desc}</div>
                        </div>
+                       {currentPage === pageMap[index] && (
+                         <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></div>
+                       )}
                      </button>
                    );
                 })}
               </div>
             </div>
 
-            <div className="p-4 border-t border-slate-200 bg-slate-50">
-              <button onClick={signOut} className="flex items-center gap-2 text-slate-700 hover:text-white hover:bg-blue-700 text-sm font-medium transition-all w-full justify-center border border-slate-300 bg-white py-2 rounded-lg shadow-sm">
+            {/* Footer */}
+            <div className="p-4 bg-gradient-to-t from-slate-900 to-transparent border-t border-slate-700/50">
+              <button
+                onClick={signOut}
+                className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-red-500/30 hover:scale-105 active:scale-95"
+              >
                 <LogOut className="w-4 h-4" />
-                Encerrar Sessão
+                <span>Encerrar Sessão</span>
               </button>
             </div>
           </div>
@@ -1512,36 +1536,38 @@ export function Dashboard() {
       )}
 
       {/* Navbar */}
-      <nav className="sticky top-0 z-30 bg-white/90 backdrop-blur-md shadow-md border-b border-slate-200">
+      <nav className="sticky top-0 z-30 bg-gradient-to-r from-white via-blue-50 to-white/95 backdrop-blur-xl shadow-lg border-b border-blue-100/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-4">
-              <button 
+          <div className="flex justify-between items-center h-16 gap-4">
+            {/* Left Section */}
+            <div className="flex items-center gap-3">
+              <button
                 onClick={() => setIsSidebarOpen(true)}
-                className="p-2 -ml-2 hover:bg-slate-100 rounded-lg text-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                className="p-2.5 -ml-2 hover:bg-blue-100/60 rounded-lg text-slate-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400/50 group"
               >
-                <Menu className="w-6 h-6" />
+                <Menu className="w-6 h-6 group-hover:text-blue-600 transition-colors" />
               </button>
-              
-              <div className="flex items-center gap-3 border-l border-slate-300 pl-4">
-                <div className="bg-gradient-to-br from-blue-700 to-blue-900 p-2 rounded-lg shadow-sm">
+
+              <div className="flex items-center gap-3 border-l border-slate-200 pl-4">
+                <div className="bg-gradient-to-br from-blue-600 to-indigo-600 p-2.5 rounded-xl shadow-md group-hover:shadow-lg transition-all">
                   <Server className="w-5 h-5 text-white" />
                 </div>
                 <div className="hidden md:block">
-                  <h1 className="text-lg font-bold text-slate-900 leading-tight tracking-tight">SIGCOP</h1>
-                  <p className="text-[10px] text-blue-700 uppercase tracking-widest font-bold">{user?.organization || 'Sistema de Gestão'}</p>
+                  <h1 className="text-lg font-bold bg-gradient-to-r from-blue-700 to-indigo-600 bg-clip-text text-transparent leading-tight tracking-tight">SIGCOP</h1>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">{user?.organization || 'Sistema de Gestão'}</p>
                 </div>
               </div>
             </div>
 
+            {/* Search Bar */}
             <div className="flex-1 max-w-lg mx-4 hidden md:block">
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-slate-400 group-focus-within:text-blue-700 transition-colors" />
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors duration-200" />
                 </div>
                 <input
                   type="text"
-                  className="block w-full pl-10 pr-3 py-2 border border-slate-300 rounded-full leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-700 transition-all sm:text-sm"
+                  className="block w-full pl-12 pr-4 py-2.5 border border-slate-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all duration-200 sm:text-sm font-medium shadow-sm hover:shadow-md"
                   placeholder="Buscar módulos ou serviços..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -1549,16 +1575,17 @@ export function Dashboard() {
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <button className="md:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-lg">
-                 <Search className="w-5 h-5" />
+            {/* Right Section */}
+            <div className="flex items-center gap-3">
+              <button className="md:hidden p-2.5 text-slate-600 hover:bg-blue-100/60 rounded-lg transition-all duration-200 group">
+                <Search className="w-5 h-5 group-hover:text-blue-600 transition-colors" />
               </button>
 
-              <div className="hidden sm:flex items-center gap-3 px-3 py-1.5 bg-white hover:bg-slate-50 transition-colors rounded-full border border-slate-200 shadow-sm cursor-pointer group">
-                <div className="bg-blue-100 p-1 rounded-full group-hover:bg-blue-200 transition-colors">
+              <div className="hidden sm:flex items-center gap-2.5 px-3.5 py-2 bg-white hover:bg-blue-50 transition-all duration-200 rounded-full border border-slate-200 shadow-md hover:shadow-lg cursor-pointer group">
+                <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-1.5 rounded-full group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-200">
                   <User className="w-4 h-4 text-blue-700" />
                 </div>
-                <div className="pr-2">
+                <div className="pr-1">
                   <p className="text-sm font-bold text-slate-800">{user?.full_name?.split(' ')[0]}</p>
                 </div>
               </div>
