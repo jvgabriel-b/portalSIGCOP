@@ -19,22 +19,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSupabaseUser(session?.user ?? null);
-      if (session?.user) {
-        loadUserProfile(session.user.id);
-      } else {
-        setLoading(false);
-      }
-    });
+    const initAuth = async () => {
+      try {
+        console.log('AuthContext: Initializing auth...');
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      (async () => {
+        if (sessionError) {
+          console.warn('AuthContext: Session error:', sessionError);
+          setLoading(false);
+          return;
+        }
+
         setSupabaseUser(session?.user ?? null);
         if (session?.user) {
           await loadUserProfile(session.user.id);
         } else {
-          setUser(null);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('AuthContext: Init error:', error);
+        setLoading(false);
+      }
+    };
+
+    initAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      (async () => {
+        try {
+          setSupabaseUser(session?.user ?? null);
+          if (session?.user) {
+            await loadUserProfile(session.user.id);
+          } else {
+            setUser(null);
+            setLoading(false);
+          }
+        } catch (error) {
+          console.error('AuthContext: Auth state change error:', error);
           setLoading(false);
         }
       })();
@@ -44,30 +65,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const loadUserProfile = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', userId)
-      .maybeSingle();
+    try {
+      console.log('AuthContext: Loading user profile...');
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
 
-    if (!error && data) {
-      setUser(data);
+      if (!error && data) {
+        console.log('AuthContext: User profile loaded');
+        setUser(data);
+      } else if (error) {
+        console.warn('AuthContext: Profile load error:', error);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error('AuthContext: Profile load exception:', error);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const signIn = async (email: string, password: string) => {
     try {
+      console.log('AuthContext: Signing in...');
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       return { error: null };
     } catch (error) {
+      console.error('AuthContext: Sign in error:', error);
       return { error: error as Error };
     }
   };
 
   const signUp = async (email: string, password: string, fullName: string, organization: string) => {
     try {
+      console.log('AuthContext: Signing up...');
       const { data, error } = await supabase.auth.signUp({ email, password });
       if (error) throw error;
 
@@ -87,14 +120,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       return { error: null };
     } catch (error) {
+      console.error('AuthContext: Sign up error:', error);
       return { error: error as Error };
     }
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setSupabaseUser(null);
+    try {
+      console.log('AuthContext: Signing out...');
+      await supabase.auth.signOut();
+      setUser(null);
+      setSupabaseUser(null);
+    } catch (error) {
+      console.error('AuthContext: Sign out error:', error);
+    }
   };
 
   return (
