@@ -149,7 +149,7 @@ export function Login() {
           {/* Footer do painel esquerdo */}
           <div className="mt-16 pt-8 border-t border-blue-400/30">
             <p className="text-xs text-blue-200">
-              © 2024 Governo do Estado de São Paulo. Todos os direitos reservados.
+              © 2024 SIGCOP. Todos os direitos reservados.
             </p>
           </div>
         </div>
