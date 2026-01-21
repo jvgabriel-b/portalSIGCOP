@@ -36,20 +36,20 @@ const quickServices = [
     bg: 'bg-blue-50'
   },
   {
-    id: 'cadastro',
-    title: 'Cadastro e Classificação',
-    desc: 'Padronizar e classificar contratos por tipo, objeto e fonte',
-    icon: FileCheck,
-    color: 'text-green-700',
-    bg: 'bg-green-50'
-  },
-  {
     id: 'planejamento',
     title: 'Planejamento e Formalização',
     desc: 'Elaborar minutas, termos de referência e pareceres',
     icon: Target,
     color: 'text-purple-700',
     bg: 'bg-purple-50'
+  },
+  {
+    id: 'cadastro',
+    title: 'Cadastro e Classificação',
+    desc: 'Padronizar e classificar contratos por tipo, objeto e fonte',
+    icon: FileCheck,
+    color: 'text-green-700',
+    bg: 'bg-green-50'
   },
   {
     id: 'execucao',
@@ -126,7 +126,7 @@ const quickServices = [
 ];
 
 const pageMap: ModulePage[] = [
-  'central', 'cadastro', 'planejamento', 'execucao', 'financeiro',
+  'central', 'planejamento', 'cadastro', 'execucao', 'financeiro',
   'aditivos', 'fiscalizacao', 'comunicacao', 'indicadores', 'governanca',
   'territorial', 'inteligencia_artificial'
 ];
