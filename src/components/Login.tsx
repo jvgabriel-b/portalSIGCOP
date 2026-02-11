@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { Lock, Mail, Eye, EyeOff, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, CheckCircle2, AlertCircle, ExternalLink } from 'lucide-react';
 
 export function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -391,6 +391,36 @@ export function Login() {
                 'Criar Minha Conta'
               )}
             </button>
+
+            {/* Divisor */}
+            {isLogin && (
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200" />
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="bg-white px-3 text-gray-500">ou acesse com</span>
+                </div>
+              </div>
+            )}
+
+            {/* Botão Gov.br SSO */}
+            {isLogin && (
+              <button
+                type="button"
+                onClick={() => {
+                  setError('');
+                  setLoading(true);
+                  // Redireciona para fluxo OAuth Gov.br
+                  window.location.href = 'https://sso.acesso.gov.br/authorize?response_type=code&client_id=sigcop-sjc&scope=openid+email+phone+profile+govbr_confiabilidades&redirect_uri=' + encodeURIComponent(window.location.origin + '/auth/callback');
+                }}
+                className="w-full flex items-center justify-center gap-3 bg-[#1351B4] hover:bg-[#0C326F] text-white py-3 rounded-lg font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-[#1351B4] focus:ring-offset-2 shadow-lg hover:shadow-xl"
+              >
+                <img src="https://www.gov.br/favicon.ico" alt="Gov.br" className="w-5 h-5" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                <span>Entrar com Gov.br</span>
+                <ExternalLink className="w-4 h-4 opacity-60" />
+              </button>
+            )}
 
             {/* Links Footer */}
             <div className="flex flex-col sm:flex-row justify-center gap-3 text-xs text-gray-600 pt-4 border-t border-gray-200">

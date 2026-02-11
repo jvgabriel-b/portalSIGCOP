@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { ModuloCentral } from './modulo-central/ModuloCentral';
 import {
   LogOut, User, Server, Target, Map,
   Activity, Menu, X, Search,
@@ -854,7 +855,7 @@ export function Dashboard() {
                       </div>
                       <p className="text-sm text-slate-600">{mov.destino} • {mov.responsavel}</p>
                       {mov.evento !== '-' && (
-                        <p className="text-xs text-indigo-600 mt-1">📌 {mov.evento}</p>
+                        <p className="text-xs text-indigo-600 mt-1">{mov.evento}</p>
                       )}
                     </div>
                     <div className="text-right">
@@ -3277,8 +3278,12 @@ export function Dashboard() {
       </div>
     );
 
+    // Módulo Central tem layout próprio com AdminLayout + sidebar interna
+    if (currentPage === 'central') {
+      return <ModuloCentral onBack={() => setCurrentPage('dashboard')} />;
+    }
+
     const moduleContent: any = {
-      central: { title: 'Módulo Central da Plataforma Digital', icon: Server, content: <CentralContent /> },
       planejamento: { title: 'Módulo de Planejamento e Formalização', icon: Target, content: <PlanejamentoContent /> },
       execucao: { title: 'Módulo de Execução e Monitoramento', icon: TrendingUp, content: <ExecucaoContent /> },
       bolsistas: { title: 'Módulo de Gestão de Bolsistas', icon: GraduationCap, content: <BolsistasContent /> },
